@@ -27,7 +27,7 @@ function Asset(name) {
 
   Asset.all.push(this);
 
-
+  settingItem();
 
 }
 Asset.all = [];
@@ -242,4 +242,4 @@ function gettingItem (){
 }
 
 gettingItem();
-settingItem();
+
