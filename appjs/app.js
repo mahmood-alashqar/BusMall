@@ -4,8 +4,11 @@ const assets = ['bag.jpg', 'banana.jpg', 'bathroom.jpg', 'boots.jpg', 'breakfast
 
 let totalOfVotes=[];
 let totalOfViews=[];
-
 let itemExisit=[];
+
+let rightAssetRandom=0;
+let leftAssetRandom=0;
+let midAssetRandom=0;
 
 const leftAsset = document.getElementById('left-asset');
 const midAsset = document.getElementById('mid-asset');
@@ -23,7 +26,6 @@ function Asset(name) {
   this.views = 0;
 
   Asset.all.push(this);
-  //   Asset.tempAsset.push(this);
 
 
 
@@ -58,9 +60,7 @@ let midAssettImg ;
 //   leftAssetImg = Asset.all[leftAssetRandom];
 //   rightAssetImg = Asset.all[rightAssetRandom];
 //   midAssettImg = Asset.all[midAssetRandom];
-let rightAssetRandom=0;
-let leftAssetRandom=0;
-let midAssetRandom=0;
+
 // }
 function render() {
   rightAssetRandom = getRandomNumber(0,Asset.all.length-1);
@@ -107,8 +107,9 @@ function render() {
 
 render();
 assetSection.addEventListener('click', handelClick);
+
 function handelClick(event) {
-  console.log(event);
+  event.preventDefault();
   if (event.target.id !== 'assets-section') {
     if (event.target.id === rightAsset.id) {
 
@@ -122,7 +123,7 @@ function handelClick(event) {
       // enableDisable();
     }
     else if (event.target.id === leftAsset.id) {
-      console.log(Asset.all[leftAssetRandom]);
+
       Asset.all[leftAssetRandom].votes++;
       Asset.all[rightAssetRandom].views++;
       Asset.all[leftAssetRandom].views++;
@@ -143,6 +144,7 @@ function handelClick(event) {
 
     }
     render();
+    enableDisable();
   }
 
 
@@ -160,13 +162,14 @@ function getRandomNumber(min, max) {
 
 let listView = document.getElementById('list');
 listView.addEventListener('click', listVieww);
+
 function listVieww() {
 
   const unOrderList = document.createElement('ul');
   listView.appendChild(unOrderList);
   for (let i = 0; i < assets.length; i++) {
-    Asset.totalOfVotes.push(Asset.all[i].votes);
-    Asset.totalOfViews.push(Asset.all[i].views);
+    totalOfVotes.push(Asset.all[i].votes);
+    totalOfViews.push(Asset.all[i].views);
     let listItem = document.createElement('li');
     unOrderList.appendChild(listItem);
     listItem.textContent = ` ${Asset.all[i].name}  had  ${Asset.all[i].votes}  votes,    and was seen  ${Asset.all[i].views}   times`;
@@ -177,13 +180,17 @@ function listVieww() {
 let btnSubmit = document.getElementById('btnSubmit');
 btnSubmit.addEventListener('click', enableDisable);
 function enableDisable() {
+
   //Reference the Button.
 
 
   //Verify the TextBox value.
   if (counterClick === numberOfRound) {
+
+
     //Enable the TextBox when TextBox has value.
     btnSubmit.disabled = false;
+
     listVieww();
     assetSection.removeEventListener('click', handelClick);
     chartRender();
@@ -219,3 +226,20 @@ function chartRender(){
     options: {}
   });
 }
+function settingItem (){let data = JSON.stringify(Asset.all);
+  localStorage.setItem('userItems', data);
+}
+
+
+function gettingItem (){
+  let stringObject = localStorage.getItem('userItems');
+  let tempObject = JSON.parse(stringObject);
+  if (tempObject !== null)
+  {
+    Asset.all = tempObject;
+  }
+  render();
+}
+
+gettingItem();
+settingItem();
