@@ -27,7 +27,7 @@ function Asset(name) {
 
   Asset.all.push(this);
 
-  settingItem();
+ 
 
 }
 Asset.all = [];
@@ -194,6 +194,7 @@ function enableDisable() {
     listVieww();
     assetSection.removeEventListener('click', handelClick);
     chartRender();
+    settingItem();
   }
 
 }
